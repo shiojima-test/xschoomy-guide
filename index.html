@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XSchooMy × Roblox 連携ガイド｜SchooMy</title>
+<style>
+  :root{
+    --teal:#3AABA8;
+    --cream:#F5E4C4;
+    --orange:#E88A0A;
+    --blue:#2E8EC4;
+    --dark:#1F2A30;
+    --teal-soft:#e7f4f3;
+    --orange-soft:#fdf0dd;
+    --line:#d9d4c8;
+    --ink:#243036;
+    --muted:#5f6f76;
+    --paper:#fbf8f1;
+    --card:#ffffff;
+    --code-bg:#1f2a30;
+    --code-ink:#e8efe9;
+    --font:"Meiryo","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:var(--font);
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.85;
+    font-size:16px;
+  }
+
+  /* ===== Header ===== */
+  .site-head{
+    background:var(--dark);
+    color:#fff;
+    padding:0;
+    position:relative;
+    overflow:hidden;
+  }
+  .site-head::after{
+    content:"";
+    position:absolute;left:0;right:0;bottom:0;height:6px;
+    background:linear-gradient(90deg,var(--teal) 0%,var(--teal) 33%,var(--orange) 33%,var(--orange) 66%,var(--blue) 66%);
+  }
+  .head-inner{
+    max-width:980px;margin:0 auto;padding:38px 28px 42px;
+    display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  }
+  .head-title{font-size:1.9rem;font-weight:bold;margin:0;letter-spacing:.02em;}
+  .head-title .x{color:var(--teal);}
+  .head-title .r{color:var(--orange);}
+  .head-sub{margin:8px 0 0;color:#c7d3d8;font-size:.95rem;font-weight:normal;}
+  .head-logo{
+    font-size:1.25rem;font-weight:bold;color:#fff;border:2px solid var(--teal);
+    padding:8px 16px;border-radius:8px;white-space:nowrap;
+  }
+  .head-logo .m{color:var(--teal);}
+
+  /* ===== Layout ===== */
+  .wrap{max-width:980px;margin:0 auto;padding:0 28px;}
+
+  /* ===== Intro band ===== */
+  .intro{
+    background:var(--teal-soft);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:26px 28px;
+    margin:34px 0;
+  }
+  .intro h2{margin-top:0;}
+  .flow{
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    margin:18px 0 4px;
+  }
+  .flow .node{
+    background:#fff;border:2px solid var(--teal);border-radius:10px;
+    padding:8px 14px;font-weight:bold;font-size:.9rem;text-align:center;color:var(--dark);
+  }
+  .flow .node small{display:block;font-weight:normal;color:var(--muted);font-size:.75rem;margin-top:2px;}
+  .flow .arr{color:var(--orange);font-weight:bold;font-size:1.2rem;}
+
+  /* ===== TOC ===== */
+  .toc{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:22px 26px;margin:30px 0;
+  }
+  .toc h2{margin-top:0;font-size:1.15rem;}
+  .toc ol{margin:0;padding-left:1.4em;}
+  .toc li{margin:7px 0;}
+  .toc a{color:var(--blue);text-decoration:none;font-weight:bold;}
+  .toc a:hover{text-decoration:underline;}
+
+  /* ===== Section ===== */
+  section{margin:50px 0;scroll-margin-top:20px;}
+  .sec-head{
+    display:flex;align-items:center;gap:14px;margin-bottom:6px;
+    border-bottom:3px solid var(--teal);padding-bottom:10px;
+  }
+  .sec-num{
+    background:var(--teal);color:#fff;font-weight:bold;
+    width:38px;height:38px;border-radius:9px;flex:0 0 38px;
+    display:flex;align-items:center;justify-content:center;font-size:1.05rem;
+  }
+  .sec-head h2{margin:0;font-size:1.4rem;}
+  .sec-goal{
+    color:var(--muted);font-size:.92rem;margin:10px 0 18px;
+    background:var(--orange-soft);border-left:4px solid var(--orange);
+    padding:8px 14px;border-radius:0 8px 8px 0;
+  }
+
+  h3{font-size:1.1rem;margin:26px 0 8px;color:var(--dark);}
+  h3 .step-tag{
+    display:inline-block;background:var(--blue);color:#fff;font-size:.72rem;
+    padding:2px 9px;border-radius:20px;margin-right:8px;vertical-align:middle;font-weight:bold;
+  }
+  p{margin:10px 0;}
+  ul,ol{padding-left:1.5em;}
+  li{margin:5px 0;}
+
+  /* ===== Callouts ===== */
+  .note,.warn,.tip{
+    border-radius:10px;padding:14px 18px;margin:18px 0;font-size:.93rem;
+  }
+  .note{background:var(--teal-soft);border-left:4px solid var(--teal);}
+  .warn{background:#fce9e4;border-left:4px solid #d9512c;}
+  .tip{background:var(--orange-soft);border-left:4px solid var(--orange);}
+  .note b,.warn b,.tip b{display:block;margin-bottom:4px;}
+
+  /* ===== Code ===== */
+  code.inline{
+    background:#eae5d8;color:#7a3d00;padding:2px 7px;border-radius:5px;
+    font-family:"SF Mono",Consolas,Menlo,monospace;font-size:.86em;
+  }
+  pre{
+    background:var(--code-bg);color:var(--code-ink);border-radius:10px;
+    padding:16px 18px;overflow-x:auto;font-size:.85rem;line-height:1.6;
+    font-family:"SF Mono",Consolas,Menlo,monospace;margin:14px 0;
+  }
+  pre .c{color:#8aa0a8;}
+  pre .k{color:#7fd1cd;}
+  pre .v{color:#f0b860;}
+
+  /* ===== Download ===== */
+  .dl-row{display:flex;gap:16px;flex-wrap:wrap;margin:20px 0;}
+  .dl-card{
+    flex:1 1 280px;background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:10px;
+  }
+  .dl-card h3{margin:0;}
+  .dl-card p{margin:0;color:var(--muted);font-size:.88rem;flex-grow:1;}
+  .dl-btn{
+    display:inline-block;background:var(--orange);color:#fff;text-decoration:none;
+    font-weight:bold;padding:12px 22px;border-radius:9px;text-align:center;
+    transition:filter .15s;border:none;cursor:pointer;font-size:.95rem;font-family:var(--font);
+  }
+  .dl-btn:hover{filter:brightness(1.07);}
+  .dl-btn.teal{background:var(--teal);}
+  .dl-pending{
+    display:inline-block;background:#cfc9bb;color:#fff;font-weight:bold;
+    padding:12px 22px;border-radius:9px;text-align:center;font-size:.95rem;
+  }
+
+  /* ===== Steps list (numbered cards) ===== */
+  .steps{counter-reset:st;list-style:none;padding:0;margin:18px 0;}
+  .steps>li{
+    counter-increment:st;position:relative;padding:4px 0 16px 46px;margin:0;
+    border-left:2px dashed var(--line);margin-left:16px;
+  }
+  .steps>li::before{
+    content:counter(st);position:absolute;left:-16px;top:0;
+    background:var(--blue);color:#fff;width:30px;height:30px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:.9rem;
+  }
+  .steps>li:last-child{border-left:2px dashed transparent;}
+
+  /* ===== Table ===== */
+  table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.9rem;}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;}
+  th{background:var(--dark);color:#fff;font-weight:bold;}
+  tr:nth-child(even) td{background:#f5f1e8;}
+
+  /* ===== Screenshot placeholder ===== */
+  .shot{
+    background:repeating-linear-gradient(45deg,#efeade,#efeade 10px,#e8e2d4 10px,#e8e2d4 20px);
+    border:2px dashed #b9b2a0;border-radius:10px;padding:30px;text-align:center;
+    color:#8c8472;font-size:.85rem;margin:14px 0;
+  }
+  .shot b{color:#6f6757;}
+
+  /* ===== FAQ ===== */
+  .faq{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 22px;margin:14px 0;}
+  .faq summary{font-weight:bold;cursor:pointer;padding:12px 0;color:var(--dark);}
+  .faq summary::marker{color:var(--orange);}
+  .faq p{padding-bottom:12px;margin-top:0;color:var(--muted);font-size:.92rem;}
+
+  /* ===== Footer ===== */
+  footer{
+    background:var(--dark);color:#c7d3d8;margin-top:60px;padding:30px 28px;font-size:.85rem;
+  }
+  footer .f-inner{max-width:980px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+  footer a{color:var(--teal);text-decoration:none;}
+
+  @media(max-width:640px){
+    .head-title{font-size:1.4rem;}
+    .sec-head h2{font-size:1.15rem;}
+    .flow{flex-direction:column;align-items:stretch;}
+    .flow .arr{transform:rotate(90deg);align-self:center;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="head-inner">
+    <div>
+      <h1 class="head-title"><span class="x">X</span>SchooMy <span style="color:#6f8089;">×</span> <span class="r">Roblox</span> 連携ガイド</h1>
+      <p class="head-sub">明るさセンサーで Roblox の世界を暗くしよう ── 学生向けセットアップ手順書</p>
+    </div>
+    <div class="head-logo">Schoo<span class="m">My</span></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===== INTRO ===== -->
+  <div class="intro">
+    <h2>このガイドでできること</h2>
+    <p>スクーミー（オレンジボード）の<b>明るさセンサー</b>を使って、Roblox の世界の空を暗くしたり明るくしたりします。センサーを手で覆うと、Roblox の中が夜のように暗くなります。手を離すと元に戻ります。</p>
+    <p>仕組みはとてもシンプルです。スクーミーが明るさの値を出し、<code class="inline">XSchooMy</code> という橋渡しのプログラムがその値を Roblox に運び、Roblox がそれを受け取って空を変えます。</p>
+    <div class="flow">
+      <div class="node">スクーミー<small>明るさを測る</small></div>
+      <span class="arr">→</span>
+      <div class="node">XSchooMy<small>値を運ぶ（橋）</small></div>
+      <span class="arr">→</span>
+      <div class="node">Roblox<small>空を変える</small></div>
+    </div>
+    <div class="note" style="margin-top:18px;">
+      <b>進め方のコツ</b>
+      上から順番に進めてください。とくに「APIキー」「Universe ID」「.env」のところは、はじめてだと迷いやすいので、画面をよく見ながらゆっくり進めましょう。分からなくなったら、近くの先生に聞いてください。
+    </div>
+  </div>
+
+  <!-- ===== TOC ===== -->
+  <nav class="toc">
+    <h2>目次</h2>
+    <ol>
+      <li><a href="#s1">用意するもの</a></li>
+      <li><a href="#s2">XSchooMy（橋のプログラム）をダウンロードする</a></li>
+      <li><a href="#s3">Mac に Python を準備する</a></li>
+      <li><a href="#s4">Roblox でレーシングのワールドを作る</a></li>
+      <li><a href="#s5">APIキーを取る</a></li>
+      <li><a href="#s6">Universe ID を調べる</a></li>
+      <li><a href="#s7">.env ファイルを作って設定を書く</a></li>
+      <li><a href="#s8">Roblox にプログラム（luau）を入れる</a></li>
+      <li><a href="#s9">動かしてみる</a></li>
+      <li><a href="#s10">うまくいかないとき</a></li>
+    </ol>
+  </nav>
+
+  <!-- ===== S1 ===== -->
+  <section id="s1">
+    <div class="sec-head"><div class="sec-num">1</div><h2>用意するもの</h2></div>
+    <div class="sec-goal">この章のゴール：必要な機材とアカウントがそろっているか確認する。</div>
+    <ul>
+      <li><b>スクーミー（オレンジボード）</b>と、つなぐ USB ケーブル</li>
+      <li><b>明るさセンサー（CdS）</b></li>
+      <li><b>Mac</b>（このガイドは Mac の画面で説明します）</li>
+      <li><b>スクーミーIDE</b>（ボードにプログラムを書き込むソフト）</li>
+      <li><b>Roblox のアカウント</b>と <b>Roblox Studio</b>（インストール済み）</li>
+      <li>インターネット接続</li>
+    </ul>
+    <div class="tip">
+      <b>はじめての人へ</b>
+      Roblox Studio は、Roblox の世界を作るための無料ソフトです。まだ入っていなければ、先に <code class="inline">create.roblox.com</code> からダウンロードしておきましょう。
+    </div>
+  </section>
+
+  <!-- ===== S2 ===== -->
+  <section id="s2">
+    <div class="sec-head"><div class="sec-num">2</div><h2>XSchooMy（橋のプログラム）をダウンロードする</h2></div>
+    <div class="sec-goal">この章のゴール：橋のプログラム一式を Mac に置く。</div>
+    <p>明るさの値を Roblox に運ぶ「橋」のプログラムが <code class="inline">XSchooMy</code> です。下のボタンからダウンロードしてください。</p>
+
+    <div class="dl-row">
+      <div class="dl-card">
+        <h3>XSchooMy 本体</h3>
+        <p>明るさの値を Roblox に運ぶ橋のプログラム一式（ZIP）。中に Roblox 用のプログラム（luau）も入っています。</p>
+        <!-- DOWNLOAD_XSCHOOMY -->
+        <span class="dl-pending">ダウンロード（準備中）</span>
+      </div>
+    </div>
+
+    <div class="steps">
+      <li>上の「ダウンロード」ボタンを押して、ZIP ファイルを保存する。</li>
+      <li>ダウンロードした ZIP を<b>ダブルクリックして展開（解凍）</b>する。<code class="inline">xschoomy-roblox</code> というフォルダができます。</li>
+      <li>そのフォルダを、分かりやすい場所（例：<b>デスクトップ</b>）に置く。</li>
+    </div>
+
+    <div class="warn">
+      <b>大事：このフォルダは消したり動かしたりしない</b>
+      一度置いたら、フォルダの場所は変えないでください。あとで橋を起動するときに、この場所を使います。
+    </div>
+  </section>
+
+  <!-- ===== S3 ===== -->
+  <section id="s3">
+    <div class="sec-head"><div class="sec-num">3</div><h2>Mac に Python を準備する</h2></div>
+    <div class="sec-goal">この章のゴール：橋のプログラムを動かすための土台（Python とライブラリ）を入れる。</div>
+    <p>XSchooMy は <b>Python</b> という言語で動いています。Mac で動かすために、Python 本体と、必要な部品（ライブラリ）を入れます。</p>
+
+    <div class="note">
+      <b>このあたりは先生と一緒に</b>
+      ターミナル（黒い画面でコマンドを打つアプリ）を使います。はじめての人は、先生に手伝ってもらいながら進めてください。
+    </div>
+
+    <h3><span class="step-tag">3-1</span>Python が入っているか確認する</h3>
+    <p>「ターミナル」アプリを開いて、次を打って Enter：</p>
+    <pre><span class="c"># Python のバージョンを確認</span>
+python3 --version</pre>
+    <p><code class="inline">Python 3.〇〇</code> のように数字が出れば、Python は入っています。「command not found」と出たら、Python を入れる必要があります（→ FAQ を参照、または先生へ）。</p>
+
+    <h3><span class="step-tag">3-2</span>必要なライブラリを入れる</h3>
+    <p class="dl-card" style="display:block;background:var(--orange-soft);border-color:var(--orange);">
+      <b>※ ここに入れるライブラリ名は、配布物の準備ができ次第ここに記載します（pyserial / requests など）。</b><br>
+      <!-- PYTHON_REQS -->
+    </p>
+    <p>ターミナルで次を打って Enter（実際のコマンドは確定後に差し替えます）：</p>
+    <pre><span class="c"># 例：必要なライブラリをまとめて入れる</span>
+<span class="c"># （正式なコマンドは準備中）</span></pre>
+  </section>
+
+  <!-- ===== S4 ===== -->
+  <section id="s4">
+    <div class="sec-head"><div class="sec-num">4</div><h2>Roblox でレーシングのワールドを作る</h2></div>
+    <div class="sec-goal">この章のゴール：自分のワールド（レーシング）を作って、開いておく。</div>
+
+    <h3><span class="step-tag">4-1</span>Roblox Studio を開く</h3>
+    <p>Roblox Studio を起動すると、ホーム画面が出ます。左に「New Experience」、下に「Open a Template（テンプレートを開く）」が並んでいます。</p>
+    <div class="shot"><b>［スクリーンショット］</b><br>Roblox Studio のホーム画面（テンプレート一覧が見える画面）</div>
+
+    <h3><span class="step-tag">4-2</span>レーシングのテンプレートを選ぶ</h3>
+    <p>「Open a Template」の並びの右にある <b>「See All（すべて表示）」</b> を押すと、たくさんのテンプレートが出ます。その中から <b>「Racing（レーシング）」</b> を選んでクリックします。</p>
+    <div class="note">
+      <b>レーシングが見つからないとき</b>
+      テンプレート一覧を横にスクロールするか、「See All」を押して探してください。砂漠のレース場のような見た目のテンプレートです。
+    </div>
+    <div class="shot"><b>［スクリーンショット］</b><br>レーシングのワールドが開いた画面（砂漠のレース場）</div>
+
+    <h3><span class="step-tag">4-3</span>このワールドを保存する</h3>
+    <p>開いたら、<b>File → Save to Roblox（Roblox に保存）</b> で、自分のワールドとして保存しておきます。名前は分かりやすいもの（例：<code class="inline">明るさセンサー連携テスト</code>）にしましょう。</p>
+    <div class="tip">
+      <b>なぜ保存するの？</b>
+      あとで使う「Universe ID」は、Roblox に保存（公開）したワールドにだけ付く番号だからです。保存しておかないと次の手順に進めません。
+    </div>
+  </section>
+
+  <!-- ===== S5 ===== -->
+  <section id="s5">
+    <div class="sec-head"><div class="sec-num">5</div><h2>APIキーを取る</h2></div>
+    <div class="sec-goal">この章のゴール：自分専用のAPIキー（合言葉）を作る。これで橋が Roblox にデータを送れるようになる。</div>
+    <p><b>APIキー</b>は、橋（XSchooMy）が「自分の Roblox に値を送ってもいいよ」と許可するための、長い合言葉のようなものです。<b>自分のキーを自分で作ります。</b></p>
+
+    <div class="warn">
+      <b>APIキーは絶対に他の人に見せない</b>
+      APIキーは、自分の Roblox のパスワードのようなものです。人に教えたり、ネットに貼ったりしないでください。
+    </div>
+
+    <h3><span class="step-tag">5-1</span>Creator Dashboard を開く</h3>
+    <p>ブラウザで <code class="inline">create.roblox.com/dashboard/credentials</code> を開きます（Roblox にログインした状態で）。左のメニューから <b>Open Cloud → API Keys</b> を選び、<b>「Create API Key（APIキーを作成）」</b> を押します。</p>
+
+    <h3><span class="step-tag">5-2</span>名前をつける（①全般的な情報）</h3>
+    <p>「名前（必須）」のところに、分かりやすい名前を入れます。例：<code class="inline">SchooMyRoblox</code>。「詳細」は空のままで大丈夫です。</p>
+    <div class="shot"><b>［スクリーンショット］</b><br>「① 全般的な情報」── 名前を入力する画面</div>
+
+    <h3><span class="step-tag">5-3</span>アクセス権限を設定する（②アクセス権限）</h3>
+    <p>「APIシステムを選択」の欄をクリックして、<b>memory-stores</b> を選びます。すると <code class="inline">memory-store</code> の操作を選ぶ欄が出るので、次の<b>3つ</b>を追加します：</p>
+    <table>
+      <tr><th>追加する操作</th><th>意味</th></tr>
+      <tr><td><code class="inline">memory-store.queue:add</code></td><td>データを入れる</td></tr>
+      <tr><td><code class="inline">memory-store.queue:dequeue</code></td><td>データを取り出す</td></tr>
+      <tr><td><code class="inline">memory-store.queue:discard</code></td><td>データを捨てる</td></tr>
+    </table>
+    <p>欄の中の「add」「dequeue」「discard」にチェックが付けばOKです。</p>
+    <div class="shot"><b>［スクリーンショット］</b><br>「② アクセス権限」── memory-store.queue の add / dequeue / discard を選んだ画面</div>
+    <div class="note">
+      <b>「Restrict by Experience」は？</b>
+      オフのままで大丈夫です（特定のワールドだけに限定する設定です。今回は使いません）。
+    </div>
+
+    <h3><span class="step-tag">5-4</span>セキュリティ（③セキュリティ）</h3>
+    <p>「このAPIキーで使用できるIPアドレスを制限する」は<b>オフのまま</b>でOK。「有効期限」は <b>有効期限なし</b> にしておくと、しばらく使い続けられます。</p>
+    <div class="shot"><b>［スクリーンショット］</b><br>「③ セキュリティ」── IP制限オフ・有効期限なしの画面</div>
+
+    <h3><span class="step-tag">5-5</span>キーを作って、コピーする</h3>
+    <p>下の <b>「キーを保存して生成する」</b> ボタンを押します。すると<b>長い文字の列（APIキー）</b>が表示されます。</p>
+    <div class="warn">
+      <b>いますぐコピーして、安全な場所に貼り付けて保存！</b>
+      このキーは、この画面を閉じると<b>二度と全部は見られません</b>。表示されたらすぐにコピーして、メモ帳などに貼って大切に保管してください。あとで <code class="inline">.env</code> に貼り付けます。
+    </div>
+  </section>
+
+  <!-- ===== S6 ===== -->
+  <section id="s6">
+    <div class="sec-head"><div class="sec-num">6</div><h2>Universe ID を調べる</h2></div>
+    <div class="sec-goal">この章のゴール：自分のワールドの番号（Universe ID）を調べてメモする。</div>
+    <p><b>Universe ID</b> は、自分のワールドに付いている<b>番号</b>です。橋がこの番号を見て「どのワールドに値を送るか」を決めます。調べ方は2つあります。どちらでもOKです。</p>
+
+    <h3><span class="step-tag">方法A</span>Creator Dashboard で調べる（おすすめ）</h3>
+    <div class="steps">
+      <li>ブラウザで <code class="inline">create.roblox.com</code> を開く。</li>
+      <li>自分のワールド（さっき保存したレーシング）を探す。</li>
+      <li>そのワールドの <b>3点メニュー（…）</b> を押す。</li>
+      <li>メニューから <b>「Copy Universe ID（Universe ID をコピー）」</b> を押す。これで番号がコピーされます。</li>
+      <li>メモ帳などに貼り付けて、メモしておく。</li>
+    </div>
+
+    <h3><span class="step-tag">方法B</span>Studio で調べる</h3>
+    <p>Roblox Studio で自分のワールドを開き、下の <b>コマンド欄（Output の下の入力欄）</b> に次を打って Enter：</p>
+    <pre><span class="k">print</span>(game.GameId)</pre>
+    <p>Output に出た<b>数字</b>が Universe ID です。メモしておきましょう。</p>
+    <div class="note">
+      <b>覚えておこう</b>
+      Universe ID は <b>数字だけ</b>です（例：<code class="inline">12345678901</code> のような十数桁の数）。これも次の <code class="inline">.env</code> で使います。
+    </div>
+  </section>
+
+  <!-- ===== S7 ===== -->
+  <section id="s7">
+    <div class="sec-head"><div class="sec-num">7</div><h2>.env ファイルを作って設定を書く</h2></div>
+    <div class="sec-goal">この章のゴール：APIキー・Universe ID・ポートを、橋のプログラムに教える。</div>
+    <p><code class="inline">.env</code>（ドット・イーエヌブイ）は、橋のプログラムに「あなたのAPIキーはこれ、ワールドの番号はこれ」と教えるための<b>設定ファイル</b>です。</p>
+
+    <h3><span class="step-tag">7-1</span>見本ファイルをコピーする</h3>
+    <p>ダウンロードしたフォルダの中に <code class="inline">.env.example</code> という<b>見本ファイル</b>が入っています。これをコピーして、名前を <code class="inline">.env</code> に変えます。</p>
+    <div class="note">
+      <b>なぜコピーするの？</b>
+      見本（.env.example）はそのまま残しておいて、自分用の設定は <code class="inline">.env</code> に書く、というのがルールです。失敗しても見本が残っているのでやり直せます。
+    </div>
+
+    <h3><span class="step-tag">7-2</span>.env の中身を書く</h3>
+    <p><code class="inline">.env</code> をテキストエディタで開いて、次のように書きます。<b>= の右側</b>に、自分の値を入れてください。</p>
+    <pre><span class="k">ROBLOX_API_KEY</span>=<span class="v">（5章でコピーしたAPIキーを貼る）</span>
+<span class="k">UNIVERSE_ID</span>=<span class="v">（6章で調べた番号を貼る）</span>
+<span class="k">SERIAL_PORT</span>=<span class="v">（7-3で調べるポートを書く）</span>
+<span class="k">BAUD</span>=<span class="v">9600</span></pre>
+    <div class="warn">
+      <b>注意</b>
+      <code class="inline">=</code> の前後に空白を入れない。APIキーは<b>全部</b>を正確に貼る（途中で切れないように）。<code class="inline">BAUD</code> は <code class="inline">9600</code> のままでOKです。
+    </div>
+
+    <h3><span class="step-tag">7-3</span>シリアルポート（SERIAL_PORT）を調べる</h3>
+    <p>ポートは、スクーミー（ボード）が Mac のどの差し込み口につながっているかを表す名前です。<b>ボードを USB でつないだ状態</b>で、ターミナルに次を打って Enter：</p>
+    <pre><span class="c"># つながっているシリアル機器を一覧表示</span>
+ls /dev/cu.*</pre>
+    <p><code class="inline">/dev/cu.usbserial-0001</code> のような名前が出てきます。それを <code class="inline">SERIAL_PORT</code> に書きます。</p>
+    <div class="note">
+      <b>名前は人によって少し違う</b>
+      末尾の番号などが違うことがあります。<code class="inline">usbserial</code> という文字が入っているものを選べばたいてい大丈夫です。迷ったら先生に確認しましょう。
+    </div>
+  </section>
+
+  <!-- ===== S8 ===== -->
+  <section id="s8">
+    <div class="sec-head"><div class="sec-num">8</div><h2>Roblox にプログラム（luau）を入れる</h2></div>
+    <div class="sec-goal">この章のゴール：Roblox 側に「空を変えるプログラム」を入れ、必要な設定をオンにする。</div>
+
+    <h3><span class="step-tag">8-1</span>Studio の設定を2つオンにする</h3>
+    <p>Roblox Studio で自分のワールドを開き、<b>File → Game Settings（または Experience Settings）→ Security</b> を開きます。次の2つを<b>オン</b>にして、<b>Save</b> を押します。</p>
+    <table>
+      <tr><th>設定</th><th>意味</th></tr>
+      <tr><td>Allow HTTP Requests</td><td>Roblox が橋（Mac）と通信できるようにする</td></tr>
+      <tr><td>Enable Studio Access to API Services</td><td>Studio がデータの仕組みを使えるようにする</td></tr>
+    </table>
+    <div class="shot"><b>［スクリーンショット］</b><br>Security 画面（2つのスイッチがオンになっている）</div>
+
+    <h3><span class="step-tag">8-2</span>プログラム（Script）を入れる</h3>
+    <p>ダウンロードしたフォルダの中の <code class="inline">roblox</code> フォルダに、Roblox に貼るプログラム（luau ファイル）が入っています。</p>
+    <div class="steps">
+      <li>Studio の右の <b>Explorer</b> で <b>ServerScriptService</b> を探す。</li>
+      <li><b>ServerScriptService</b> にカーソルを合わせ、右に出る <b>「＋」</b> を押し、<b>Script</b> を選ぶ。</li>
+      <li>できた Script を右クリック →<b>Rename</b> で、名前を <code class="inline">SensorController</code> にする。</li>
+      <li>その Script をダブルクリックで開き、中身を <b>全部消す（Cmd+A → Delete）</b>。</li>
+      <li>フォルダの中の <code class="inline">SensorController.luau</code> をテキストエディタで開き、<b>全部コピー</b>して、Studio に貼り付ける。</li>
+      <li><b>Cmd+S</b> で保存。</li>
+    </div>
+    <div class="note">
+      <b>luau の中身はさわらなくてOK</b>
+      コピーして貼るだけです。中身を読んだり変えたりする必要はありません（興味があれば読んでみてください）。
+    </div>
+  </section>
+
+  <!-- ===== S9 ===== -->
+  <section id="s9">
+    <div class="sec-head"><div class="sec-num">9</div><h2>動かしてみる</h2></div>
+    <div class="sec-goal">この章のゴール：センサーを覆うと空が暗くなることを確認する。</div>
+
+    <h3><span class="step-tag">9-1</span>橋（XSchooMy）を起動する</h3>
+    <p>ボードを USB でつないだ状態で、フォルダの中の <code class="inline">start-xschoomy.command</code> を<b>ダブルクリック</b>します。黒い画面（ターミナル）が開いて、次のような行が出ればOKです。</p>
+    <pre><span class="c"># こんな行が出れば成功</span>
+LocalHttpServer listening on http://127.0.0.1:8000/latest
+sent #1 {<span class="k">'sensor1'</span>: <span class="v">52.38</span>}</pre>
+    <div class="note">
+      <b>「ダブルクリックしても開けない」と出たら</b>
+      <code class="inline">start-xschoomy.command</code> を<b>右クリック →「開く」</b>を選び、確認画面でもう一度「開く」を押してください（はじめての一回だけ必要）。
+    </div>
+
+    <h3><span class="step-tag">9-2</span>Studio で Play する</h3>
+    <p>Roblox Studio の上の <b>Play（▷）</b> を押します。少し待つと、ゲーム画面が始まります。</p>
+
+    <h3><span class="step-tag">9-3</span>センサーを覆う</h3>
+    <div class="steps">
+      <li>明るさセンサーを<b>手で覆う</b>。</li>
+      <li>1〜2秒で、Roblox の<b>空が暗くなる</b>（夜のようになる）。</li>
+      <li>手を<b>離す</b>と、空が<b>明るく</b>戻る。</li>
+    </div>
+    <div class="tip">
+      <b>うまくいったら大成功！</b>
+      現実の明るさが、Roblox の世界の明るさに変わりました。これが「センサーで世界を動かす」ということです。
+    </div>
+  </section>
+
+  <!-- ===== S10 ===== -->
+  <section id="s10">
+    <div class="sec-head"><div class="sec-num">10</div><h2>うまくいかないとき</h2></div>
+    <div class="sec-goal">この章のゴール：よくあるつまずきを自分で直せるようにする。</div>
+
+    <details class="faq">
+      <summary>空が変わらない</summary>
+      <p>① 橋（XSchooMy）のターミナルで値（sent #… {'sensor1': …}）が流れていますか？ 流れていなければ橋が起動できていません。② Studio の「Allow HTTP Requests」がオンになっていますか？（8-1）③ Studio を一度止めて、もう一度 Play してみてください。</p>
+    </details>
+    <details class="faq">
+      <summary>ターミナルに「command not found: python3」と出る</summary>
+      <p>Python が入っていません。先生に相談するか、<code class="inline">python.org</code> から Python をインストールしてください。</p>
+    </details>
+    <details class="faq">
+      <summary>橋を起動すると「ポートが見つからない」のようなエラーが出る</summary>
+      <p>ボードが USB でつながっているか確認してください。つないでから、<code class="inline">ls /dev/cu.*</code> でポート名をもう一度調べ、<code class="inline">.env</code> の <code class="inline">SERIAL_PORT</code> が合っているか確認します（7-3）。</p>
+    </details>
+    <details class="faq">
+      <summary>「ダウンロードした start-xschoomy.command が開けない」</summary>
+      <p>右クリック →「開く」を選び、確認画面でもう一度「開く」を押してください。Mac は、はじめてのアプリにこの確認を出します。</p>
+    </details>
+    <details class="faq">
+      <summary>APIキーをメモし忘れた／なくした</summary>
+      <p>キーは作り直せます。5章をもう一度やって、新しいキーを作ってください。古いキーは Creator Dashboard で削除しておくと安全です。</p>
+    </details>
+    <details class="faq">
+      <summary>Universe ID が分からなくなった</summary>
+      <p>6章の方法でいつでも調べ直せます。Studio で <code class="inline">print(game.GameId)</code> を打つのが一番早いです。</p>
+    </details>
+  </section>
+
+</div>
+
+<footer>
+  <div class="f-inner">
+    <div>
+      <b style="color:#fff;">XSchooMy × Roblox 連携ガイド</b><br>
+      明るさセンサーで Roblox の世界を動かそう
+    </div>
+    <div>
+      © SchooMy, Inc.　<a href="https://fox.schoomy.com">fox.schoomy.com</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -290,7 +290,7 @@
         <h3>XSchooMy 本体</h3>
         <p>明るさの値を Roblox に運ぶ橋のプログラム一式（ZIP）。中に Roblox 用のプログラム（luau）も入っています。</p>
         <!-- DOWNLOAD_XSCHOOMY -->
-        <span class="dl-pending">ダウンロード（準備中）</span>
+        <a class="dl-btn" href="xschoomy-roblox.zip" download>XSchooMy をダウンロード</a>
       </div>
     </div>
 
@@ -324,13 +324,18 @@ python3 --version</pre>
     <p><code class="inline">Python 3.〇〇</code> のように数字が出れば、Python は入っています。「command not found」と出たら、Python を入れる必要があります（→ FAQ を参照、または先生へ）。</p>
 
     <h3><span class="step-tag">3-2</span>必要なライブラリを入れる</h3>
-    <p class="dl-card" style="display:block;background:var(--orange-soft);border-color:var(--orange);">
-      <b>※ ここに入れるライブラリ名は、配布物の準備ができ次第ここに記載します（pyserial / requests など）。</b><br>
-      <!-- PYTHON_REQS -->
-    </p>
-    <p>ターミナルで次を打って Enter（実際のコマンドは確定後に差し替えます）：</p>
-    <pre><span class="c"># 例：必要なライブラリをまとめて入れる</span>
-<span class="c"># （正式なコマンドは準備中）</span></pre>
+    <p>XSchooMy が使う Python ライブラリは次の 3 つです：</p>
+    <ul>
+      <li><code class="inline">pyserial</code> — オレンジボードとシリアル通信する</li>
+      <li><code class="inline">requests</code> — Roblox の Open Cloud API に値を送る (本番ゲーム用)</li>
+      <li><code class="inline">python-dotenv</code> — <code class="inline">.env</code> ファイルから API キー等を読み込む</li>
+    </ul>
+    <!-- PYTHON_REQS -->
+    <p>ターミナルで次を打って Enter：</p>
+    <pre><span class="c"># 必要なライブラリをまとめて入れる</span>
+pip3 install pyserial requests python-dotenv</pre>
+    <p><code class="inline">Successfully installed ...</code> のように出れば OK。<br>
+    「<code class="inline">externally-managed-environment</code>」 のようなエラーが出た場合は、末尾に <code class="inline">--user</code> を付けて再実行 (<code class="inline">pip3 install --user pyserial requests python-dotenv</code>)。</p>
   </section>
 
   <!-- ===== S4 ===== -->
